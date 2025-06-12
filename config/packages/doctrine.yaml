@@ -1,29 +1,58 @@
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+        connections:
+            catalog:
+                url: "%env(resolve:CATALOG_DATABASE_URL)%"
 
+            customer:
+                url: "%env(resolve:CUSTOMER_DATABASE_URL)%"
+
+            order:
+                url: "%env(resolve:ORDER_DATABASE_URL)%"
+
+            payment:
+                url: "%env(resolve:PAYMENT_DATABASE_URL)%"
+        default_connection: catalog
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '16'
-
-        profiling_collect_backtrace: '%kernel.debug%'
-        use_savepoints: true
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
-        report_fields_where_declared: true
-        validate_xml_mapping: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        identity_generation_preferences:
-            Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
-        auto_mapping: true
-        mappings:
-            App:
-                type: attribute
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+        default_entity_manager: catalog
+
+        entity_managers:
+            catalog:
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: catalog
+                mappings:
+                    catalog:
+                        type: attribute
+                        is_bundle: false
+                        dir: "%kernel.project_dir%/src/Catalog/Entity"
+                        prefix: 'App\Catalog\Entity'
+                        alias: Catalog
+                identity_generation_preferences:
+                    Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
+
+            customer:
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: customer
+                mappings:
+                    customer:
+                        type: attribute
+                        is_bundle: false
+                        dir: "%kernel.project_dir%/src/Customer/Entity"
+                        prefix: App\Customer\Entity
+                        alias: Customer
+
+                identity_generation_preferences:
+                    Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
+
         controller_resolver:
             auto_mapping: false
 
@@ -31,13 +60,13 @@ when@test:
     doctrine:
         dbal:
             # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            dbname_suffix: "_test%env(default::TEST_TOKEN)%"
 
 when@prod:
     doctrine:
         orm:
             auto_generate_proxy_classes: false
-            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            proxy_dir: "%kernel.build_dir%/doctrine/orm/Proxies"
             query_cache_driver:
                 type: pool
                 pool: doctrine.system_cache_pool
