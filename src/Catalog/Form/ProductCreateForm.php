@@ -13,6 +13,7 @@ use Symfony\UX\Dropzone\Form\DropzoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,27 +31,38 @@ class ProductCreateForm extends AbstractType
         $builder
             ->add('sku', TextType::class, [
                 'label' => 'Numéro SKU',
-                'attr' => ['placeholder' => 'Entrez le SKU du produit']
+                'attr' => ['placeholder' => 'Entrez le SKU du produit'],
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('name', TextType::class, [
                 'label' => 'Nom du produit',
-                'attr' => ['placeholder' => 'Entrez le nom du produit']
+                'attr' => ['placeholder' => 'Entrez le nom du produit'],
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('description', QuillType::class, [
                 'quill_extra_options' => [
                     'height' => '200px',
                     'theme' => 'snow',
                     'placeholder' => 'Decrivez en détail le produit',
+
                 ],
             ])
             ->add('status', EnumType::class, [
                 'class' => ProductStatus::class,
                 'label' => 'Statut du produit',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
                 'currency' => 'XAF',
                 'attr' => ['placeholder' => 'Entrez le prix du produit'],
+
             ])
             ->add('weight', NumberType::class, [
                 'label' => 'Poids',

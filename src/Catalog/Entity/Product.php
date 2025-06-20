@@ -13,10 +13,8 @@ use App\Catalog\Enum\ProductTaxCode;
 use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use App\Catalog\Repository\ProductRepository;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use symfony\Component\Validator\Constraints as Assert;
 
-#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
@@ -62,6 +60,7 @@ class Product
     private ?ProductTaxCode $taxCategory = null;
 
     #[ORM\Column()]
+    #[Assert\NotBlank]
     private ?float $vatRate = 0.0;
 
     #[ORM\Column(length: 255)]

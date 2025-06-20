@@ -16,6 +16,9 @@ class VariantAttribute
     #[ORM\Column(length: 20)]
     private ?string $label = null;
 
+    #[ORM\Column(length: 20)]
+    private ?string $value = null;
+
     #[ORM\ManyToOne(inversedBy: 'variantAttributes')]
     private ?ProductVariant $productVariant = null;
 
@@ -44,6 +47,24 @@ class VariantAttribute
     public function setProductVariant(?ProductVariant $productVariant): static
     {
         $this->productVariant = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of value
+     */
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set the value of value
+     */
+    public function setValue(?string $value): self
+    {
+        $this->value = $value;
 
         return $this;
     }

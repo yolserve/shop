@@ -21,8 +21,11 @@ class ProductVariantForm extends AbstractType
         $builder
             ->add('price', MoneyType::class, [
                 'currency' => 'XAF',
+                'label' => 'Prix',
             ])
-            ->add('sku', TextType::class, [])
+            ->add('sku', TextType::class, [
+                'label' => 'SKU',
+            ])
             ->add('variantStatus', EnumType::class, [
                 'class' => VariantStatus::class,
                 'placeholder' => 'Selectionnez le statut',

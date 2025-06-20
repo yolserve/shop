@@ -45,7 +45,24 @@ class ProductController extends AbstractController
         ]);
     }
 
-    public function update(): Response
+    #[Route(path: "/catalogue-des-produits", name: 'app_product_catalog')]
+    public function productCatalog(ProductRepository $repository): Response
+    {
+        return $this->render("pages/catalog/product/front_product_list.html.twig", [
+            "products" => $repository->findAll(),
+        ]);
+    }
+
+    #[Route(path: "/{id}", name: 'app_product_show')]
+    public function show(Product $product): Response
+    {
+        return $this->render("pages/catalog/product/show.html.twig", [
+            "product" => $product,
+        ]);
+    }
+
+    #[Route(path: "/{id}/modifier", name: 'app_product_update')]
+    public function update(Product $product): Response
     {
         return $this->render("pages/catalog/product/update.html.twig");
     }
