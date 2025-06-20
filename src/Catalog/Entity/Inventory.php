@@ -2,8 +2,9 @@
 
 namespace App\Catalog\Entity;
 
-use App\Repository\InventoryRepository;
+use App\Catalog\Repository\InventoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
@@ -17,15 +18,16 @@ class Inventory
     private ?Uuid $id = null;
 
     #[ORM\Column]
-    private ?int $quantityEvailable = null;
+    private ?int $quantityAvailable = 0;
 
     #[ORM\Column]
-    private ?int $quantityReserved = null;
+    private ?int $quantityReserved = 0;
 
     #[ORM\Column]
-    private ?int $lowStockThreshold = null;
+    private ?int $lowStockThreshold = 0;
 
     #[ORM\Column]
+    #[Timestampable(on: 'update')]
     private ?\DateTime $lastUpdated = null;
 
     public function getId(): ?Uuid
@@ -33,14 +35,14 @@ class Inventory
         return $this->id;
     }
 
-    public function getQuantityEvailable(): ?int
+    public function getQuantityAvailable(): ?int
     {
-        return $this->quantityEvailable;
+        return $this->quantityAvailable;
     }
 
-    public function setQuantityEvailable(int $quantityEvailable): static
+    public function setQuantityAvailable(int $quantityAvailable): static
     {
-        $this->quantityEvailable = $quantityEvailable;
+        $this->quantityAvailable = $quantityAvailable;
 
         return $this;
     }

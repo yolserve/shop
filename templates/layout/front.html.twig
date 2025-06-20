@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Customer Area{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/customer.css') }}">
+{% endblock %}
+
+{% block body %}
+
+{% include "layout/_front_header.html.twig" %}
+
+    <div class="container">
+        <h1>Welcome to the Customer Area</h1>
+        <p>This is a protected area for customers.</p>
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/customer.js') }}"></script>
+{% endblock %}

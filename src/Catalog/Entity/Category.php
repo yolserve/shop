@@ -2,16 +2,20 @@
 
 namespace App\Catalog\Entity;
 
-use App\Catalog\Enum\CategoryStatus;
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
+use App\Catalog\Enum\CategoryStatus;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use App\Catalog\Repository\CategoryRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[Vich\Uploadable]
 class Category
 {
     #[ORM\Id]
@@ -27,6 +31,7 @@ class Category
     private ?string $description = null;
 
     #[ORM\Column(length: 70)]
+    #[Slug(fields: ['name'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
@@ -41,11 +46,17 @@ class Category
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childCategories')]
     private ?self $parentCategory = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $thumbnailUrl = null;
+
     /**
      * @var Collection<int, self>
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentCategory')]
     private Collection $childCategories;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -169,5 +180,20 @@ class Category
         }
 
         return $this;
+    }
+
+    public function getThumbnailUrl(): ?string
+    {
+        return $this->thumbnailUrl;
+    }
+
+    public function setThumbnailUrl(?string $thumbnailUrl): void
+    {
+        $this->thumbnailUrl = $thumbnailUrl;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

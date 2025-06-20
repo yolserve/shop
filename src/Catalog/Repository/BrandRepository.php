@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Repository;
+namespace App\Catalog\Repository;
 
-use App\Entity\Brand;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
+use App\Catalog\Entity\Brand;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Brand>

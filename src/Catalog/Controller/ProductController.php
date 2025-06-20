@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Catalog\Controller;
+
+use App\Catalog\Entity\Product;
+use App\Catalog\Form\ProductCreateForm;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Common\Service\FileUploaderHelper;
+use App\Catalog\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+#[Route(path: "/produits")]
+class ProductController extends AbstractController
+{
+    public function __construct(private readonly FileUploaderHelper $fileUploader) {}
+    #[Route(path: "/", name: "product_list", methods: ["GET"])]
+    public function index(ProductRepository $repository): Response
+    {
+        return $this->render("pages/catalog/product/index.html.twig", [
+            "products" => $repository->findAll(),
+        ]);
+    }
+
+    #[Route(path: "/creer-un-produit", name: 'app_product_create')]
+    public function create(Request $request, EntityManagerInterface $em): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductCreateForm::class, $product);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $product->setThumbnail($this->fileUploader->uploadProductThumbnail($form->get('thumbnailFile')->getData()));
+            $em->persist($product);
+            $em->flush();
+            return $this->redirectToRoute('product_list');
+        }
+        return $this->render("pages/catalog/product/create.html.twig", [
+            "product" => $product,
+            "form" => $form
+        ]);
+    }
+
+    public function update(): Response
+    {
+        return $this->render("pages/catalog/product/update.html.twig");
+    }
+}

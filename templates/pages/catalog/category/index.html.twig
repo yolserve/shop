@@ -1,0 +1,45 @@
+{% extends "layout/admin.html.twig" %}
+
+{% block header_actions %}
+
+<a href="{{path('app_category_create')}}" class="btn btn-primary">Ajouter une catégotrie</a>
+
+
+{% endblock %}
+
+{% block content %}
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Categorie</th>
+            <th>Parent</th>
+            <th>Statut</th>
+            <th>Total produits</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for category in categories %}
+        <tr>
+            <td class="d-flex align-items-center">
+                <img src="{{asset('uploads/category_images/' ~ category.thumbnailUrl)}}" alt="" width="50" height="50"
+                    class="rounded me-3 shadow">
+                <div class="">
+                    <strong>{{category.name}}</strong> <br>
+                    <span class="text-muted">{{category.description|slice(0, 50) ~ '...'}}</span>
+                </div>
+            </td>
+            <td>{{category.parentCategory ? category.parentCategory.name : '-' }}</td>
+            <td>{{category.status.value}} </td>
+            <td></td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+
+{% endblock %}

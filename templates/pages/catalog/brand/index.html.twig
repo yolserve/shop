@@ -1,0 +1,43 @@
+{% extends "layout/admin.html.twig" %}
+
+{% block header_actions %}
+
+<a href="{{path('app_brand_create')}}" class="btn btn-primary">Ajouter une marque</a>
+
+
+{% endblock %}
+
+{% block content %}
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Marque</th>
+            <th>Statut</th>
+            <th>Total produits</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for brand in brands %}
+        <tr>
+            <td class="d-flex align-items-center">
+                <img src="{{asset('uploads/logo_images/' ~ brand.logoUrl)}}" alt="" width="50" height="50"
+                    class="rounded me-3 shadow">
+                <div class="">
+                    <strong>{{brand.name}}</strong> <br>
+                    <span class="text-muted">{{brand.description|raw}}</span>
+                </div>
+            </td>
+            <td>{{brand.status.value}} </td>
+            <td></td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+
+{% endblock %}

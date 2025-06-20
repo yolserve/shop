@@ -2,7 +2,7 @@
 
 namespace App\Catalog\Entity;
 
-use App\Repository\VariantAttributeRepository;
+use App\Catalog\Repository\VariantAttributeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VariantAttributeRepository::class)]

@@ -2,12 +2,13 @@
 
 namespace App\Catalog\Entity;
 
-use App\Catalog\Enum\BrandStatus;
-use App\Repository\BrandRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use App\Catalog\Enum\BrandStatus;
+use Gedmo\Mapping\Annotation\Slug;
+use App\Catalog\Repository\BrandRepository;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 #[ORM\Entity(repositoryClass: BrandRepository::class)]
 class Brand
@@ -34,7 +35,11 @@ class Brand
     private ?string $metaDescription = null;
 
     #[ORM\Column(length: 255)]
+    #[Slug(fields: ['name'])]
     private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $logoUrl = null;
 
     public function getId(): ?Uuid
     {
@@ -97,6 +102,18 @@ class Brand
     public function setMetaDescription(?string $metaDescription): static
     {
         $this->metaDescription = $metaDescription;
+
+        return $this;
+    }
+
+    public function getLogoUrl(): ?string
+    {
+        return $this->logoUrl;
+    }
+
+    public function setLogoUrl(string $logoUrl): static
+    {
+        $this->logoUrl = $logoUrl;
 
         return $this;
     }

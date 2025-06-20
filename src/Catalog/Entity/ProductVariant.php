@@ -3,7 +3,7 @@
 namespace App\Catalog\Entity;
 
 use App\Catalog\Enum\VariantStatus;
-use App\Repository\ProductVariantRepository;
+use App\Catalog\Repository\ProductVariantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,6 +36,10 @@ class ProductVariant
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Inventory $inventory = null;
+
+    #[ORM\ManyToOne(inversedBy: 'productVariants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Product $product = null;
 
     public function __construct()
     {
@@ -121,6 +125,18 @@ class ProductVariant
     public function setInventory(?Inventory $inventory): static
     {
         $this->inventory = $inventory;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

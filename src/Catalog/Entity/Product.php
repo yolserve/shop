@@ -2,13 +2,21 @@
 
 namespace App\Catalog\Entity;
 
-use App\Catalog\Enum\ProductStatus;
-use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
+use App\Catalog\Enum\ProductStatus;
+use App\Catalog\Enum\ProductTaxCode;
+use Gedmo\Mapping\Annotation\Timestampable;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use App\Catalog\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
@@ -28,19 +36,33 @@ class Product
     private ?ProductStatus $status = null;
 
     #[ORM\Column]
+    #[Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
+    private ?float $price = null;
+
+    #[ORM\Column]
+    private bool $physicalProduct = false;
+
+    #[ORM\Column]
+    private bool $hasVariants = false;
+
+    #[ORM\Column(nullable: true)]
     private ?float $weight = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $dimentions = null;
+    private ?string $dimensions = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $taxCategory = null;
+    #[ORM\Column(enumType: ProductTaxCode::class,)]
+    private ?ProductTaxCode $taxCategory = null;
+
+    #[ORM\Column()]
+    private ?float $vatRate = 0.0;
 
     #[ORM\Column(length: 255)]
     private ?string $metaTitle = null;
@@ -49,7 +71,14 @@ class Product
     private ?string $metaDescription = null;
 
     #[ORM\Column(length: 255)]
+    #[Slug(fields: ['name'])]
     private ?string $slug = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Inventory $inventory = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $barCode = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
@@ -57,6 +86,21 @@ class Product
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $thumbnail = null;
+
+    /**
+     * @var Collection<int, ProductVariant>
+     */
+    #[ORM\OneToMany(targetEntity: ProductVariant::class, mappedBy: 'product')]
+    private Collection $productVariants;
+
+    public function __construct()
+    {
+        $this->productVariants = new ArrayCollection();
+    }
+
 
     public function getId(): ?Uuid
     {
@@ -135,29 +179,53 @@ class Product
         return $this;
     }
 
-    public function getDimentions(): ?string
+    public function setPrice(float $price): static
     {
-        return $this->dimentions;
+        $this->price = $price;
+
+        return $this;
+    }
+    public function getPrice(): ?float
+    {
+        return $this->price;
     }
 
-    public function setDimentions(?string $dimentions): static
+    public function getDimensions(): ?string
     {
-        $this->dimentions = $dimentions;
+        return $this->dimensions;
+    }
+
+    public function setDimensions(?string $dimensions): static
+    {
+        $this->dimensions = $dimensions;
 
         return $this;
     }
 
-    public function getTaxCategory(): ?string
+    public function getTaxCategory(): ?ProductTaxCode
     {
         return $this->taxCategory;
     }
 
-    public function setTaxCategory(?string $taxCategory): static
+    public function setTaxCategory(?ProductTaxCode $taxCategory): static
     {
         $this->taxCategory = $taxCategory;
 
         return $this;
     }
+
+    public function getVatRate(): ?float
+    {
+        return $this->vatRate;
+    }
+
+    public function setVatRate(float $vatRate): static
+    {
+        $this->vatRate = $vatRate;
+
+        return $this;
+    }
+
 
     public function getMetaTitle(): ?string
     {
@@ -195,6 +263,18 @@ class Product
         return $this;
     }
 
+    public function getInventory(): ?Inventory
+    {
+        return $this->inventory;
+    }
+
+    public function setInventory(?Inventory $inventory): static
+    {
+        $this->inventory = $inventory;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -215,6 +295,88 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+    public function setThumbnail(?string $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getBarCode(): ?string
+    {
+        return $this->barCode;
+    }
+    public function setBarCode(string $barCode): static
+    {
+        $this->barCode = $barCode;
+
+        return $this;
+    }
+
+    public function isPhysicalProduct(): bool
+    {
+        return $this->physicalProduct;
+    }
+
+    public function setPhysicalProduct(bool $physicalProduct): static
+    {
+        $this->physicalProduct = $physicalProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of hasVariants
+     */
+    public function isHasVariants(): bool
+    {
+        return $this->hasVariants;
+    }
+
+    /**
+     * Set the value of hasVariants
+     */
+    public function setHasVariants(bool $hasVariants): self
+    {
+        $this->hasVariants = $hasVariants;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductVariant>
+     */
+    public function getProductVariants(): Collection
+    {
+        return $this->productVariants;
+    }
+
+    public function addProductVariant(ProductVariant $productVariant): static
+    {
+        if (!$this->productVariants->contains($productVariant)) {
+            $this->productVariants->add($productVariant);
+            $productVariant->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductVariant(ProductVariant $productVariant): static
+    {
+        if ($this->productVariants->removeElement($productVariant)) {
+            // set the owning side to null (unless already changed)
+            if ($productVariant->getProduct() === $this) {
+                $productVariant->setProduct(null);
+            }
+        }
 
         return $this;
     }

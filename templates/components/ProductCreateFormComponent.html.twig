@@ -1,0 +1,163 @@
+<div{{ attributes }}>
+
+{{ form_start(form) }}
+
+<div class="row">
+
+
+    <div class="col-md-8">
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Informations du produit
+                </h4>
+                {{ form_row(form.name) }}
+
+                <div class="row">
+                    <div class="col-6">
+                        {{form_row(form.sku)}}
+                    </div>
+                    <div class="col-6">
+                        {{form_row(form.barCode)}}
+                    </div>
+                </div>
+                {{ form_row(form.description) }}
+
+                {{form_row(form.metaTitle)}}
+                {{form_row(form.metaDescription)}}
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Variants
+                </h4>
+
+                {{ form_row(form.hasVariants) }}
+
+                <ul class="list-group">
+                    {% for variantForm in form.productVariants %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-4">
+                                {{ form_row(variantForm.price) }}
+                            </div>
+                            <div class="col-4">
+                                {{ form_row(variantForm.sku) }}
+                            </div>
+                            <div class="col-4">
+                                {{ form_row(variantForm.variantStatus) }}
+                            </div>
+
+                            {% for attributeForm in variantForm.variantAttributes %}
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            {{ form_row(attributeForm.label) }}
+                                        </div>
+                                        <div class="col-6">
+                                            {{ form_row(attributeForm.vars.button_delete, { label: 'X', attr: { class: 'btn btn-outline-danger' } }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="col-12">
+                                <pre>
+                                    {{ form_row(variantForm.variantAttributes.vars.button_add, { label: '+ Add variant attribute', attr: { class: 'btn btn-outline-primary' } }) }}
+                                </pre>
+                            </div>
+
+                            <div class="col-12">
+                                {{ form_row(variantForm.vars.button_delete, { label: 'Retirer', attr: { class: 'btn btn-outline-danger' } }) }}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {{ form_widget(form.productVariants.vars.button_add, { label: '+ Add comment', attr: { class: 'btn btn-outline-primary' } }) }}
+
+                
+
+                
+                {# {{ form_row(form.productVariants) }} #}
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Vignette du produit
+                </h4>
+                <div class="img-previw" width="100" height="100"></div>
+                {{ form_row(form.thumbnailFile, {'label':false}) }}
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Catégories et marque
+                </h4>
+                {{ form_row(form.category) }}
+                {{ form_row(form.brand) }}
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Pricing
+                </h4>
+                <div class="img-previw"></div>
+                {{ form_row(form.price) }}
+                {{ form_row(form.taxCategory) }}
+                {{ form_row(form.vatRate) }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Stock
+                </h4>
+
+                {{ form_row(form.physicalProduct) }}
+
+                {{ form_row(form.status) }}
+                <div class="row">
+                    <div class="col-6">
+                        {{ form_row(form.weight) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.dimensions) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.inventory.quantityAvailable) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.inventory.lowStockThreshold) }}
+                    </div>
+                </div>
+
+                <div class="form-text">
+                    Si le produit est physique, vous pouvez renseigner son poids et ses dimensions.
+                    Vous pouvez également gérer le stock du produit.
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<button type="submit" class="btn btn-primary">Créer le produit</button>
+{{ form_end(form) }}
+
+</div>

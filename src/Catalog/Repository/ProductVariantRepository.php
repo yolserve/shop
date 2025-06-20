@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace App\Catalog\Repository;
 
-use App\Entity\ProductVariant;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Catalog\Entity\ProductVariant;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<ProductVariant>
