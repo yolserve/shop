@@ -40,7 +40,7 @@ class Inventory
         return $this->quantityAvailable;
     }
 
-    public function setQuantityAvailable(int $quantityAvailable): static
+    public function setQuantityAvailable(?int $quantityAvailable): static
     {
         $this->quantityAvailable = $quantityAvailable;
 
@@ -52,7 +52,7 @@ class Inventory
         return $this->quantityReserved;
     }
 
-    public function setQuantityReserved(int $quantityReserved): static
+    public function setQuantityReserved(?int $quantityReserved): static
     {
         $this->quantityReserved = $quantityReserved;
 
@@ -64,7 +64,7 @@ class Inventory
         return $this->lowStockThreshold;
     }
 
-    public function setLowStockThreshold(int $lowStockThreshold): static
+    public function setLowStockThreshold(?int $lowStockThreshold): static
     {
         $this->lowStockThreshold = $lowStockThreshold;
 

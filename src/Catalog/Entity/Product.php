@@ -92,7 +92,7 @@ class Product
     /**
      * @var Collection<int, ProductVariant>
      */
-    #[ORM\OneToMany(targetEntity: ProductVariant::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: ProductVariant::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $productVariants;
 
     public function __construct()
@@ -123,7 +123,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -171,14 +171,14 @@ class Product
         return $this->weight;
     }
 
-    public function setWeight(float $weight): static
+    public function setWeight(?float $weight): static
     {
         $this->weight = $weight;
 
         return $this;
     }
 
-    public function setPrice(float $price): static
+    public function setPrice(?float $price): static
     {
         $this->price = $price;
 
@@ -218,7 +218,7 @@ class Product
         return $this->vatRate;
     }
 
-    public function setVatRate(float $vatRate): static
+    public function setVatRate(?float $vatRate): static
     {
         $this->vatRate = $vatRate;
 
@@ -231,7 +231,7 @@ class Product
         return $this->metaTitle;
     }
 
-    public function setMetaTitle(string $metaTitle): static
+    public function setMetaTitle(?string $metaTitle): static
     {
         $this->metaTitle = $metaTitle;
 
@@ -343,7 +343,7 @@ class Product
     /**
      * Set the value of hasVariants
      */
-    public function setHasVariants(bool $hasVariants): self
+    public function setHasVariants(?bool $hasVariants): self
     {
         $this->hasVariants = $hasVariants;
 

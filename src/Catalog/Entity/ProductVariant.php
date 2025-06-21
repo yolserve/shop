@@ -25,19 +25,25 @@ class ProductVariant
     #[ORM\Column(length: 20)]
     private ?string $sku = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $weight = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $dimensions = null;
+
     #[ORM\Column(enumType: VariantStatus::class)]
     private ?VariantStatus $variantStatus = null;
 
     /**
      * @var Collection<int, VariantAttribute>
      */
-    #[ORM\OneToMany(targetEntity: VariantAttribute::class, mappedBy: 'productVariant')]
+    #[ORM\OneToMany(targetEntity: VariantAttribute::class, mappedBy: 'productVariant', cascade: ['persist', 'remove'])]
     private Collection $variantAttributes;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Inventory $inventory = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productVariants')]
+    #[ORM\ManyToOne(inversedBy: 'productVariants',)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
@@ -137,6 +143,42 @@ class ProductVariant
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of weight
+     */
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set the value of weight
+     */
+    public function setWeight(?float $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dimensions
+     */
+    public function getDimensions(): ?string
+    {
+        return $this->dimensions;
+    }
+
+    /**
+     * Set the value of dimensions
+     */
+    public function setDimensions(?string $dimensions): self
+    {
+        $this->dimensions = $dimensions;
 
         return $this;
     }

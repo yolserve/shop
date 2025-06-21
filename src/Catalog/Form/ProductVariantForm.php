@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
 
 class ProductVariantForm extends AbstractType
@@ -25,6 +26,14 @@ class ProductVariantForm extends AbstractType
             ])
             ->add('sku', TextType::class, [
                 'label' => 'SKU',
+            ])
+            ->add('weight', NumberType::class, [
+                'label' => 'Poids',
+                'attr' => ['placeholder' => 'Entrez le poids du produit'],
+            ])
+            ->add('dimensions', TextType::class, [
+                'label' => 'Dimensions',
+                'attr' => ['placeholder' => 'Entrez les dimensions du produit'],
             ])
             ->add('variantStatus', EnumType::class, [
                 'class' => VariantStatus::class,

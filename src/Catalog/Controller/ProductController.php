@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Catalog\Controller;
 
+use App\Catalog\Entity\Category;
 use App\Catalog\Entity\Product;
 use App\Catalog\Form\ProductCreateForm;
+use App\Catalog\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Common\Service\FileUploaderHelper;
 use App\Catalog\Repository\ProductRepository;
@@ -46,23 +48,25 @@ class ProductController extends AbstractController
     }
 
     #[Route(path: "/catalogue-des-produits", name: 'app_product_catalog')]
-    public function productCatalog(ProductRepository $repository): Response
+    public function productCatalog(ProductRepository $repository, CategoryRepository $categoryRepository): Response
     {
         return $this->render("pages/catalog/product/front_product_list.html.twig", [
             "products" => $repository->findAll(),
+            "categories" => $categoryRepository->findBy(['parentCategory' => null], ['name' => 'ASC']),
         ]);
     }
 
     #[Route(path: "/{id}", name: 'app_product_show')]
-    public function show(Product $product): Response
+    public function show(Product $product, CategoryRepository $categoryRepository): Response
     {
-        return $this->render("pages/catalog/product/show.html.twig", [
+        return $this->render("pages/catalog/product/front_show.html.twig", [
             "product" => $product,
+            "categories" => $categoryRepository->findBy(['parentCategory' => null], ['name' => 'ASC']),
         ]);
     }
 
     #[Route(path: "/{id}/modifier", name: 'app_product_update')]
-    public function update(Product $product): Response
+    public function update(Product $product,): Response
     {
         return $this->render("pages/catalog/product/update.html.twig");
     }
