@@ -49,4 +49,29 @@ class BrandController extends AbstractController
             "form" => $form,
         ]);
     }
+
+    #[Route(path: "/{id}", name: "app_brand_show")]
+    public function show(Brand $brand): Response
+    {
+        return $this->render("pages/catalog/brand/show.html.twig", [
+            "brand" => $brand,
+        ]);
+    }
+
+    #[Route(path: "/{id}/edit", name: "app_brand_edit")]
+    public function edit(Brand $brand, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(BrandForm::class, $brand);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($brand);
+            $em->flush();
+            return $this->redirectToRoute("app_brand_list");
+        }
+        return $this->render("pages/catalog/brand/edit.html.twig", [
+            "brand" => $brand,
+            "form" => $form,
+        ]);
+    }
 }

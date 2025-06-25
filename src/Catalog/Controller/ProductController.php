@@ -56,7 +56,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/{id}", name: 'app_product_show')]
+    #[Route(path: "/details/{id}", name: 'app_product_show')]
     public function show(Product $product, CategoryRepository $categoryRepository): Response
     {
         return $this->render("pages/catalog/product/front_show.html.twig", [
@@ -65,9 +65,34 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/{id}/modifier", name: 'app_product_update')]
-    public function update(Product $product,): Response
+    #[Route(path: "/{id}", name: 'app_product_show')]
+    public function adminShow(Product $product, CategoryRepository $categoryRepository): Response
     {
-        return $this->render("pages/catalog/product/update.html.twig");
+        return $this->render("pages/catalog/product/admin_show.html.twig", [
+            "product" => $product,
+            "categories" => $categoryRepository->findBy(['parentCategory' => null], ['name' => 'ASC']),
+        ]);
+    }
+
+
+    #[Route(path: "/{id}/modifier", name: 'app_product_edit', methods: ['GET', 'POST'])]
+    public function update(Product $product, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ProductCreateForm::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('succes', 'Produit modifié avec succès !');
+
+            return $this->redirectToRoute('app_product_show');
+        }
+
+        return $this->render("pages/catalog/product/create.html.twig", [
+            'form' => $form,
+            'product' => $product,
+        ]);
     }
 }

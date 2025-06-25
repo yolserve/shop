@@ -1,1 +1,5 @@
-<twig:ProductCreateFormComponent />
+{# <twig:ProductCreateFormComponent 'product'= product/> #}
+
+{{ component('ProductCreateFormComponent', {
+    product: product,
+}) }}

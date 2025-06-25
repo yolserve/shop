@@ -1,0 +1,43 @@
+{% extends "layout/admin.html.twig" %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tableau de bord</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total des ventes</h5>
+                                        <h3 class="card-title">$1000</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            
+                            {% for product in products %}
+                                <div class="col-12 col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ product.name }}</h5>
+                                            <h3 class="card-title">{{ product.price }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                {# end of col #}
+                            {% endfor %}
+                        </div>
+                        <!--end of row-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+{% endblock %}

@@ -98,6 +98,7 @@ class ProductCreateForm extends AbstractType
                 'mapped' => false,
                 'label' => 'Vignette du produit',
                 'attr' => ['placeholder' => 'Glissez-déposez ou sélectionnez une image'],
+                'required' => false,
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

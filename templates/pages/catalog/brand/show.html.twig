@@ -13,19 +13,10 @@
 
 <table class="table">
 
-    <thead>
-        <tr>
-            <th>Marque</th>
-            <th>Statut</th>
-            <th>Total produits</th>
-            <th></th>
-        </tr>
 
-    </thead>
 
     <tbody>
 
-        {% for brand in brands %}
         <tr>
             <td class="d-flex align-items-center">
                 <img src="{{asset('uploads/logo_images/' ~ brand.logoUrl)}}" alt="" width="50" height="50"
@@ -43,14 +34,13 @@
                       ...
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{{path('app_brand_show', {'id': brand.id})}}">Consulter</a></li>
-                      <li><a class="dropdown-item" href="{{path('app_brand_edit', {'id': brand.id})}}">Modifier</a></li>
+                      <li><a class="dropdown-item" href="{{path('app_brand_show', {'id': brand.id})}}">Modifier</a></li>
+                      <li><a class="dropdown-item" href="{{path('app_brand_edit', {'id': brand.id})}}">Supprimer</a></li>
                       <li><a class="dropdown-item" href="{{path('app_brand_edit', {'id': brand.id})}}">Desactiver</a></li>
                     </ul>
                   </div>
             </td>
         </tr>
-        {% endfor %}
 
     </tbody>
 </table

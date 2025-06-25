@@ -1,0 +1,17 @@
+{% extends "layout/admin.html.twig" %}
+
+{% block header_actions %}
+
+<a href="{{path('app_brand_create')}}" class="btn btn-primary">Ajouter une marque</a>
+
+
+{% endblock %}
+
+{% block content_title %}Modifier la marque{% endblock %}
+
+{% block content %}
+
+{% include "pages/catalog/brand/_edit_form.html.twig" %}
+
+
+{% endblock %}
