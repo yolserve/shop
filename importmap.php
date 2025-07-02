@@ -119,4 +119,11 @@ return [
     '@symfony/ux-live-component' => [
         'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
     ],
+    'swiper/swiper-bundle.min.mjs' => [
+        'version' => '11.2.8',
+    ],
+    'swiper/swiper-bundle.min.css' => [
+        'version' => '11.2.8',
+        'type' => 'css',
+    ],
 ];

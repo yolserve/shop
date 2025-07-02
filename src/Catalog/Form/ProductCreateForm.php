@@ -7,6 +7,7 @@ use App\Catalog\Entity\Product;
 use App\Catalog\Entity\Category;
 use App\Catalog\Enum\ProductStatus;
 use App\Catalog\Enum\ProductTaxCode;
+use App\Catalog\Form\ProductImageForm;
 use Ehyiah\QuillJsBundle\Form\QuillType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\UX\Dropzone\Form\DropzoneType;
@@ -21,8 +22,6 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ProductCreateForm extends AbstractType
 {
@@ -94,11 +93,17 @@ class ProductCreateForm extends AbstractType
                 'attr' => ['placeholder' => 'Entrez le code-barres du produit'],
             ])
             ->add('inventory', ProductInventoryForm::class, [])
-            ->add('thumbnailFile', DropzoneType::class, [
-                'mapped' => false,
-                'label' => 'Vignette du produit',
-                'attr' => ['placeholder' => 'Glissez-déposez ou sélectionnez une image'],
+            ->add('thumbnailFile', VichImageType::class, [
                 'required' => false,
+                'allow_delete' => true,
+                'delete_label' => 'Supprimer',
+                'download_label' => 'Télécharger',
+                'download_uri' => true,
+                'image_uri' => true,
+                'asset_helper' => true,
+            ])
+            ->add('productImages', LiveCollectionType::class, [
+                'entry_type' => ProductImageForm::class,
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

@@ -2,20 +2,22 @@
 
 namespace App\Catalog\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
 use App\Catalog\Enum\ProductStatus;
 use App\Catalog\Enum\ProductTaxCode;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use App\Catalog\Repository\ProductRepository;
-use symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[Vich\Uploadable]
 class Product
 {
     #[ORM\Id]
@@ -60,7 +62,6 @@ class Product
     private ?ProductTaxCode $taxCategory = null;
 
     #[ORM\Column()]
-    #[Assert\NotBlank]
     private ?float $vatRate = 0.0;
 
     #[ORM\Column(length: 255)]
@@ -89,15 +90,25 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $thumbnail = null;
 
+    #[Vich\UploadableField(mapping: 'product_thumbnail', fileNameProperty: 'thumbnail')]
+    private ?File $thumbnailFile = null;
+
     /**
      * @var Collection<int, ProductVariant>
      */
     #[ORM\OneToMany(targetEntity: ProductVariant::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $productVariants;
 
+    /**
+     * @var Collection<int, ProductImage>
+     */
+    #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    private Collection $productImages;
+
     public function __construct()
     {
         $this->productVariants = new ArrayCollection();
+        $this->productImages = new ArrayCollection();
     }
 
 
@@ -302,11 +313,39 @@ class Product
     {
         return $this->thumbnail;
     }
+
     public function setThumbnail(?string $thumbnail): static
     {
         $this->thumbnail = $thumbnail;
 
         return $this;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $thumbnailFile
+     */
+    public function setThumbnailFile(?File $thumbnailFile = null): self
+    {
+        $this->thumbnailFile = $thumbnailFile;
+
+        if (null !== $thumbnailFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+
+        return $this;
+    }
+
+    public function getThumbnailFile(): ?File
+    {
+        return $this->thumbnailFile;
     }
 
     public function getBarCode(): ?string
@@ -374,6 +413,36 @@ class Product
             // set the owning side to null (unless already changed)
             if ($productVariant->getProduct() === $this) {
                 $productVariant->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductImage>
+     */
+    public function getProductImages(): Collection
+    {
+        return $this->productImages;
+    }
+
+    public function addProductImage(ProductImage $productImage): static
+    {
+        if (!$this->productImages->contains($productImage)) {
+            $this->productImages->add($productImage);
+            $productImage->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductImage(ProductImage $productImage): static
+    {
+        if ($this->productImages->removeElement($productImage)) {
+            // set the owning side to null (unless already changed)
+            if ($productImage->getProduct() === $this) {
+                $productImage->setProduct(null);
             }
         }
 

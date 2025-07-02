@@ -12,17 +12,44 @@
                 <h4 class="card-title">
                     Informations du produit
                 </h4>
-                {{ form_row(form.name) }}
-
                 <div class="row">
+                    <div class="col-12">
+                        {{ form_row(form.name) }}
+                    </div>
+
                     <div class="col-6">
                         {{form_row(form.sku)}}
                     </div>
                     <div class="col-6">
                         {{form_row(form.barCode)}}
                     </div>
+                    <div class="col-12">
+                        {{ form_row(form.description) }}
+                    </div>
+                    <div class="col-12">
+                        <ul class="list-group">
+                            {% for productImage in form.productImages %}
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            {{ form_row(productImage.file, {'label':false}) }}
+                                        </div>
+                                        <div class="col-2">
+                                            {{ form_row(productImage.vars.button_delete, { label: 'Supprimer', attr: { class: 'btn btn-sm btn-outline-danger' } }) }}
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                            {% endfor %}
+                        </ul>
+                        <div class="row">
+                            <div class="col-12">
+                                {{ form_row(form.productImages.vars.button_add, { label: 'Ajouter une image', attr: { class: 'btn btn-sm btn-outline-primary' } }) }}
+                            </div>
+                        </div>
+                            
+                    </div>
                 </div>
-                {{ form_row(form.description) }}
 
                 {{form_row(form.metaTitle)}}
                 {{form_row(form.metaDescription)}}
@@ -107,7 +134,7 @@
                 </h4>
                 {% if product.thumbnail %}
                 <div class="img-previw mb-2" height="100">
-                    <img src="{{asset('uploads/product_images/' ~ product.thumbnail)}}" alt="" class="img-fluid">
+                    <img src="{{ vich_uploader_asset(product, 'thumbnailFile') }}" alt="{{product.name}}">
                 </div>
                 {% endif %}
                 
