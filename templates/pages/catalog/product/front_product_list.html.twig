@@ -198,7 +198,8 @@
                         <div class="product-box">
                             <div class="product-thumb">
                                 <span class="product-label">New Season</span>
-                                <img src="{{asset('uploads/product_images/' ~ product.thumbnail)}}" alt="Product Image" class="main-img" loading="lazy">
+                                <img src="{{vich_uploader_asset(product, 'thumbnailFile')}}" alt="{{product.name}}" class="main-img" loading="lazy">
+                                {# <img src="{{asset('uploads/product_images/' ~ product.thumbnail)}}" alt="Product Image" class="main-img" loading="lazy"> #}
                                 <div class="product-overlay">
                                     <div class="product-quick-actions">
                                         <button type="button" class="quick-action-btn">

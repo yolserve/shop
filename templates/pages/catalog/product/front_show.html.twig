@@ -12,7 +12,7 @@
       <div class="product-images">
         <div class="main-image-container mb-3">
           <div class="image-zoom-container">
-            <img src="{{asset('uploads/product_images/' ~ product.thumbnail)}}" alt="Product Image" class="img-fluid main-image drift-zoom" id="main-product-image" data-zoom="{{asset('uploads/product_images/' ~ product.thumbnail)}}">
+            <img src="{{vich_uploader_asset(product, 'thumbnailFile')}}" alt="{{product.name}}" class="img-fluid main-image drift-zoom" id="main-product-image" data-zoom="{{vich_uploader_asset(product, 'thumbnailFile')}}" loading="lazy">
           </div>
         </div>
 
@@ -38,22 +38,19 @@
                 }
               }
             </script>
-            <div class="swiper-wrapper" id="swiper-wrapper-bdb17e7d212ee23e" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(-161.5px, 0px, 0px); transition-delay: 0ms;">
-              <div class="swiper-slide thumbnail-item swiper-slide-prev" data-image="assets/img/product/product-details-1.webp" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="1 / 5">
-                <img src="assets/img/product/product-details-1.webp" alt="Product Thumbnail" class="img-fluid">
+
+            <div class="swiper-wrapper d-flex" id="swiper-wrapper-bdb17e7d212ee23e" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(-161.5px, 0px, 0px); transition-delay: 0ms;">
+              
+              <div class="swiper-slide thumbnail-item swiper-slide-active active" data-image="{{vich_uploader_asset(product, 'thumbnailFile')}}" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="1 / {{product.productImages|length + 1}}">
+                <img src="{{vich_uploader_asset(product, 'thumbnailFile')}}" alt="Product Thumbnail" class="img-fluid">
               </div>
-              <div class="swiper-slide thumbnail-item swiper-slide-active active" data-image="assets/img/product/product-details-2.webp" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="2 / 5">
-                <img src="assets/img/product/product-details-2.webp" alt="Product Thumbnail" class="img-fluid">
+
+              {% for image in product.productImages %}
+              <div class="swiper-slide thumbnail-item" data-image="{{vich_uploader_asset(image, 'file')}}" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="{{loop.index + 1}} / {{product.productImages|length + 1}}">
+                <img src="{{vich_uploader_asset(image, 'file')}}" alt="Product Thumbnail" class="img-fluid">
               </div>
-              <div class="swiper-slide thumbnail-item swiper-slide-next" data-image="assets/img/product/product-details-3.webp" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="3 / 5">
-                <img src="assets/img/product/product-details-3.webp" alt="Product Thumbnail" class="img-fluid">
-              </div>
-              <div class="swiper-slide thumbnail-item" data-image="assets/img/product/product-details-4.webp" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="4 / 5">
-                <img src="assets/img/product/product-details-4.webp" alt="Product Thumbnail" class="img-fluid">
-              </div>
-              <div class="swiper-slide thumbnail-item" data-image="assets/img/product/product-details-5.webp" style="width: 151.5px; margin-right: 10px;" role="group" aria-label="5 / 5">
-                <img src="assets/img/product/product-details-5.webp" alt="Product Thumbnail" class="img-fluid">
-              </div>
+              {% endfor %}
+              
             </div>
             <div class="swiper-button-next swiper-button-disabled" tabindex="-1" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-bdb17e7d212ee23e" aria-disabled="true"></div>
             <div class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-bdb17e7d212ee23e" aria-disabled="false"></div>

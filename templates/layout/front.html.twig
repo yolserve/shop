@@ -2,11 +2,6 @@
 
 {% block title %}Customer Area{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/customer.css') }}">
-{% endblock %}
-
 {% block body %}
 
 {% include "layout/_front_header.html.twig" %}
@@ -27,8 +22,7 @@
     {% block content %}{% endblock %}
 </div>
 
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/customer.js') }}"></script>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center active">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
 {% endblock %}
