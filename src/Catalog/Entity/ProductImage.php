@@ -5,6 +5,7 @@ namespace App\Catalog\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Catalog\Repository\ProductImageRepository;
+use Gedmo\Mapping\Annotation\Timestampable;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductImageRepository::class)]
@@ -28,13 +29,15 @@ class ProductImage
     #[ORM\Column(length: 255)]
     private ?string $mimeType = null;
 
-    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'name', size: 'imageSize', mimeType: 'mimeType', originalName: 'originalName')]
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'name', size: 'size', mimeType: 'mimeType', originalName: 'originalName')]
     private ?File $file = null;
 
     #[ORM\Column]
+    #[Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'productImages')]

@@ -115,11 +115,6 @@
                     {{ form_widget(form.productVariants.vars.button_add, { label: '+ Ajouter une variante', attr: { class: 'btn btn-outline-primary' } }) }}
                 </div>
 
-                
-
-                
-                {# {{ form_row(form.productVariants) }} #}
-
             </div>
         </div>
 
@@ -132,13 +127,8 @@
                 <h4 class="card-title">
                     Vignette du produit
                 </h4>
-                {% if product.thumbnail %}
-                <div class="img-previw mb-2" height="100">
-                    <img src="{{ vich_uploader_asset(product, 'thumbnailFile') }}" alt="{{product.name}}">
-                </div>
-                {% endif %}
-                
                 {{ form_row(form.thumbnailFile, {'label':false}) }}
+                
             </div>
         </div>
 

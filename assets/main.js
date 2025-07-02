@@ -1,4 +1,10 @@
-import { Swiper } from 'swiper/swiper-bundle.min.mjs'
+import { Swiper } from 'swiper/swiper-bundle.min.mjs';
+import AOS from 'aos';
+import Drift from 'drift-zoom';
+import GLightbox from 'glightbox';
+import PureCounter from '@srexi/purecounterjs';
+
+
 (function () {
   "use strict";
 

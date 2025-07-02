@@ -126,4 +126,7 @@ return [
         'version' => '11.2.8',
         'type' => 'css',
     ],
+    '@srexi/purecounterjs' => [
+        'version' => '1.5.0',
+    ],
 ];
