@@ -113,7 +113,7 @@
 
                 <div class="mb-4">
                     <h5 class="fw-bold">Vignette du produit</h5>
-                    <img src="{{asset('uploads/product_images/' ~ product.thumbnail)}}" alt="Vignette du produit" class="img-fluid rounded shadow-sm">
+                    <img src="{{vich_uploader_asset(product, 'thumbnailFile')}}" alt="{{product.name}}" class="img-fluid">
                 </div>
         
                 <div class="mb-4">

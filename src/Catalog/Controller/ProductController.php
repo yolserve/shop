@@ -36,8 +36,8 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $product->setThumbnail($this->fileUploader->uploadProductThumbnail($form->get('thumbnailFile')->getData()));
-            $em->persist($product);
+            // $product->setThumbnail($this->fileUploader->uploadProductThumbnail($form->get('thumbnailFile')->getData()));
+            // $em->persist($product);
             $em->flush();
             return $this->redirectToRoute('product_list');
         }
@@ -87,7 +87,7 @@ class ProductController extends AbstractController
 
             $this->addFlash('succes', 'Produit modifié avec succès !');
 
-            return $this->redirectToRoute('app_product_show');
+            return $this->redirectToRoute('app_product_show', ['id' => $product->getId()]);
         }
 
         return $this->render("pages/catalog/product/create.html.twig", [

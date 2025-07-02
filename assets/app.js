@@ -7,7 +7,7 @@ import './bootstrap.js';
  */
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Swiper } from './vendor/swiper/swiper.index.js';
+
 import 'bootstrap';
 import './main.js';
 // import './app.js';
