@@ -105,6 +105,9 @@ class Product
     #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $productImages;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Brand $brand = null;
+
     public function __construct()
     {
         $this->productVariants = new ArrayCollection();
@@ -445,6 +448,18 @@ class Product
                 $productImage->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?Brand $brand): static
+    {
+        $this->brand = $brand;
 
         return $this;
     }

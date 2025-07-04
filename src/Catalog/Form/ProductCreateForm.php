@@ -110,7 +110,6 @@ class ProductCreateForm extends AbstractType
                 'choice_label' => 'name',
             ])
             ->add('brand', EntityType::class, [
-                'mapped' => false,
                 'class' => Brand::class,
                 'choice_label' => 'name',
             ])

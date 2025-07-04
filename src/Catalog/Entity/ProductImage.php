@@ -53,7 +53,7 @@ class ProductImage
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -65,7 +65,7 @@ class ProductImage
         return $this->originalName;
     }
 
-    public function setOriginalName(string $originalName): static
+    public function setOriginalName(?string $originalName): static
     {
         $this->originalName = $originalName;
 
@@ -77,7 +77,7 @@ class ProductImage
         return $this->size;
     }
 
-    public function setSize(int $size): static
+    public function setSize(?int $size): static
     {
         $this->size = $size;
 
@@ -89,7 +89,7 @@ class ProductImage
         return $this->mimeType;
     }
 
-    public function setMimeType(string $mimeType): static
+    public function setMimeType(?string $mimeType): static
     {
         $this->mimeType = $mimeType;
 

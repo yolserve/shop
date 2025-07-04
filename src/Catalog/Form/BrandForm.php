@@ -15,6 +15,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class BrandForm extends AbstractType
 {
@@ -36,8 +37,8 @@ class BrandForm extends AbstractType
                 'class' => BrandStatus::class,
                 'label' => 'Statut de la marque',
             ])
-            ->add('logoFile', DropzoneType::class, [
-                'mapped' => false,
+            ->add('logoFile', VichImageType::class, [
+                'required' => false,
                 'label' => 'Logo de la marque',
 
             ])

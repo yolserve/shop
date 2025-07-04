@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use App\Catalog\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation\Timestampable;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -49,6 +50,9 @@ class Category
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $thumbnailUrl = null;
 
+    #[Vich\UploadableField(mapping: 'category_thumbnail', fileNameProperty: 'thumbnailUrl')]
+    private ?File $thumbnailFile;
+
     /**
      * @var Collection<int, self>
      */
@@ -56,7 +60,12 @@ class Category
     private Collection $childCategories;
 
     #[ORM\Column(nullable: true)]
+    #[Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column]
+    #[Timestampable(on: 'create')]
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
@@ -195,5 +204,47 @@ class Category
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of thumbnailFile
+     */
+    public function getThumbnailFile(): ?File
+    {
+        return $this->thumbnailFile;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $thumbnailFile
+     */
+    public function setThumbnailFile(?File $thumbnailFile): self
+    {
+        $this->thumbnailFile = $thumbnailFile;
+
+        if (null !== $thumbnailFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+
+        return $this;
     }
 }

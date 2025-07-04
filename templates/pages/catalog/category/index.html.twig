@@ -17,6 +17,7 @@
             <th>Parent</th>
             <th>Statut</th>
             <th>Total produits</th>
+            <th></th>
         </tr>
     </thead>
 
@@ -25,7 +26,7 @@
         {% for category in categories %}
         <tr>
             <td class="d-flex align-items-center">
-                <img src="{{asset('uploads/category_images/' ~ category.thumbnailUrl)}}" alt="" width="50" height="50"
+                <img src="{{vich_uploader_asset(category, 'thumbnailFile')}}" alt="{{category.name}}" width="50" height="40"
                     class="rounded me-3 shadow">
                 <div class="">
                     <strong>{{category.name}}</strong> <br>
@@ -35,6 +36,17 @@
             <td>{{category.parentCategory ? category.parentCategory.name : '-' }}</td>
             <td>{{category.status.value}} </td>
             <td></td>
+            <td><div class="dropdown">
+                <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  ...
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{{path('app_category_show', {'id': category.id})}}">Consulter</a></li>
+                  <li><a class="dropdown-item" href="{{path('app_category_edit', {'id': category.id})}}">Modifier</a></li>
+                  <li><a class="dropdown-item" href="{{path('app_category_edit', {'id': category.id})}}">Desactiver</a></li>
+                </ul>
+              </div>
+        </td></td>
         </tr>
         {% endfor %}
 
