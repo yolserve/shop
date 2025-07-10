@@ -26,18 +26,13 @@ class BrandController extends AbstractController
     }
 
     #[Route(path: "/creer-une-marque", name: "app_brand_create")]
-    public function create(Request $request, EntityManagerInterface $em, FileUploaderHelper $fileUploader): Response
+    public function create(Request $request, EntityManagerInterface $em,): Response
     {
         $brand = new Brand();
         $form = $this->createForm(BrandForm::class, $brand);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // dd($form['thumbnailFile']->getData(), $request);
-
-            $thumbnailFilename = $fileUploader->uploadLogoImage($form['logoFile']->getData());
-            $brand->setLogoUrl($thumbnailFilename);
 
             $em->persist($brand);
             $em->flush();

@@ -34,8 +34,8 @@ class CategoryForm extends AbstractType
                 'class' => CategoryStatus::class,
                 'label' => 'Statut de la catégorie',
             ])
-            ->add('thumbnailFile', DropzoneType::class, [
-                'mapped' => false,
+            ->add('thumbnailFile', VichImageType::class, [
+                'required' => false,
                 'label' => 'Vignette de la catégorie',
 
             ])

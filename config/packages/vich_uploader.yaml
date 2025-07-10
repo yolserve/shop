@@ -31,8 +31,8 @@ vich_uploader:
             delete_on_remove: true
 
         brand_logos:
-            uri_prefix: /uploads/logo_images
-            upload_destination: "%kernel.project_dir%/public/uploads/logo_images"
+            uri_prefix: /images/logo_images
+            upload_destination: "%kernel.project_dir%/public/images/logo_images"
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             inject_on_load: false
             delete_on_update: true

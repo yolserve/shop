@@ -26,18 +26,13 @@ class CategoryController extends AbstractController
     }
 
     #[Route(path: "/creer-une-categorie", name: "app_category_create")]
-    public function create(Request $request, EntityManagerInterface $em, FileUploaderHelper $fileUploader): Response
+    public function create(Request $request, EntityManagerInterface $em,): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryForm::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // dd($form['thumbnailFile']->getData(), $request);
-
-            $thumbnailFilename = $fileUploader->uploadCategoryImage($form['thumbnailFile']->getData());
-            $category->setThumbnailUrl($thumbnailFilename);
 
             $em->persist($category);
             $em->flush();
@@ -46,6 +41,31 @@ class CategoryController extends AbstractController
         }
 
         return $this->render("pages/catalog/category/create.html.twig", [
+            "form" => $form,
+        ]);
+    }
+
+    #[Route(path: "/{id}", name: "app_category_show")]
+    public function show(Category $category): Response
+    {
+        return $this->render("pages/catalog/category/show.html.twig", [
+            "category" => $category,
+        ]);
+    }
+
+    #[Route(path: "/{id}/edit", name: "app_category_edit")]
+    public function edit(Category $category, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CategoryForm::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($category);
+            $em->flush();
+            return $this->redirectToRoute("app_category_list");
+        }
+        return $this->render("pages/catalog/category/edit.html.twig", [
+            "category" => $category,
             "form" => $form,
         ]);
     }
