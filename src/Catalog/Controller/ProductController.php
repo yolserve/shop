@@ -34,6 +34,8 @@ class ProductController extends AbstractController
         $form = $this->createForm(ProductCreateForm::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->persist($product);
             $em->flush();
             return $this->redirectToRoute('product_list');
         }
